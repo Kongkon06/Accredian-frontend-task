@@ -40,13 +40,6 @@ export default function ReferralBenefits() {
     const [searchTerm, setSearchTerm] = useState("");
     const categoriesRef = useRef<HTMLDivElement | null>(null);
     const tableBodyRef = useRef<HTMLDivElement | null>(null);
-    
-    const syncHeight = () => {
-        if (categoriesRef.current && tableBodyRef.current) {
-          const categoriesHeight = categoriesRef.current.clientHeight - 70;
-          tableBodyRef.current.style.maxHeight = `${categoriesHeight}px`;
-        }
-      };
       
 
     // Filter programs based on selected category and search term
@@ -228,7 +221,13 @@ export default function ReferralBenefits() {
                                 <div
                                     ref={tableBodyRef}
                                     className="overflow-y-auto"
-                                    style={{ maxHeight: "300px" }} // Initial height, will be updated by useEffect
+                                    style={{
+                                        maxHeight: "300px",
+                                        overflowY: "auto",
+                                        scrollbarWidth: "none", // For Firefox
+                                        msOverflowStyle: "none", // For IE & Edge
+                                      }}
+                                       // Initial height, will be updated by useEffect
                                 >
                                     <table className="w-full">
                                         <tbody>

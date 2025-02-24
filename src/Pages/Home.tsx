@@ -1,6 +1,8 @@
 import ReferralModal from "@/components/Referral"
 import { SVG } from "@/components/SVG"
-import ReferralBenefits from "@/components/test"
+import ReferralBenefits from "@/components/Benefits"
+import { FAQSection } from "@/components/Frequentask"
+import Footer from "@/components/Footer"
 
 export function Home() {
   return (
@@ -66,6 +68,12 @@ export function Home() {
             </div>
           </div>
         </div>
+      </section>
+      <section className="mx-auto">
+        <FAQSection/>
+      </section>
+      <section>
+        <Footer/>
       </section>
     </main>
   )
