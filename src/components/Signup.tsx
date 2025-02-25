@@ -5,8 +5,9 @@ import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { useState } from "react"
-import { Loader2, Github } from "lucide-react"
+import { Loader2 } from "lucide-react"
 import { Progress } from "@/components/ui/progress"
+
 
 const passwordSchema = z
   .string()
@@ -18,7 +19,9 @@ const passwordSchema = z
 
 const formSchema = z
   .object({
-    name: z.string().min(2, "Name must be at least 2 characters"),
+    firstName: z.string().min(2, "First name must be at least 2 characters"),
+    lastName: z.string().min(2, "Last name must be at least 2 characters"),
+    phone: z.string().min(10, "Please enter a valid phone number"),
     email: z.string().email("Invalid email address"),
     password: passwordSchema,
     confirmPassword: z.string(),
@@ -35,7 +38,9 @@ export function SignUpForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
+      firstName: "",
+      lastName: "",
+      phone: "",
       email: "",
       password: "",
       confirmPassword: "",
@@ -71,19 +76,35 @@ export function SignUpForm() {
     <div className="grid gap-6">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Enter your name" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <FormField
+              control={form.control}
+              name="firstName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>First Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="John" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="lastName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Last Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Doe" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          
           <FormField
             control={form.control}
             name="email"
@@ -91,12 +112,27 @@ export function SignUpForm() {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="name@example.com" {...field} />
+                  <Input placeholder="name@example.com" type="email" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
+          
+          <FormField
+            control={form.control}
+            name="phone"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Phone Number</FormLabel>
+                <FormControl>
+                  <Input placeholder="+91 987-123-4567" type="tel" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          
           <FormField
             control={form.control}
             name="password"
@@ -114,11 +150,21 @@ export function SignUpForm() {
                     }}
                   />
                 </FormControl>
-                <Progress value={passwordStrength} className="h-1" />
+                <div className="space-y-1">
+                  <Progress value={passwordStrength} className="h-1" />
+                  <div className="text-xs text-gray-500">
+                    {passwordStrength === 0 && "Very weak"}
+                    {passwordStrength > 0 && passwordStrength < 50 && "Weak"}
+                    {passwordStrength >= 50 && passwordStrength < 75 && "Medium"}
+                    {passwordStrength >= 75 && passwordStrength < 100 && "Strong"}
+                    {passwordStrength === 100 && "Very strong"}
+                  </div>
+                </div>
                 <FormMessage />
               </FormItem>
             )}
           />
+          
           <FormField
             control={form.control}
             name="confirmPassword"
@@ -132,7 +178,8 @@ export function SignUpForm() {
               </FormItem>
             )}
           />
-          <Button type="submit" className="w-full" disabled={isLoading}>
+          
+          <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-500" disabled={isLoading}>
             {isLoading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -144,20 +191,6 @@ export function SignUpForm() {
           </Button>
         </form>
       </Form>
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t" />
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
-        </div>
-      </div>
-      <div className="grid gap-2">
-        <Button variant="outline" type="button">
-          <Github className="mr-2 h-4 w-4" /> Github
-        </Button>
-      </div>
     </div>
   )
 }
-

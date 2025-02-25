@@ -1,15 +1,17 @@
 import {BrowserRouter, Routes ,Route} from "react-router-dom"
 import { Home} from "./Pages/Home"
-import Hero from "./components/Hero"
 import { AuthPage } from "./Pages/Auth"
+import { RecoilRoot } from "recoil"
 
 export default function App() {
-  return <BrowserRouter>
+  return <RecoilRoot>
+  <BrowserRouter>
   <Routes>
+    
     <Route path="/" element={<Home/>}/>
-    <Route path="/test" element={<Hero/>}/>
     <Route path="/auth" element={<AuthPage/>}/>
   </Routes>
   </BrowserRouter>
+  </RecoilRoot>
 }
 

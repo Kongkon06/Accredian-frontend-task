@@ -11,6 +11,8 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { useSetRecoilState } from "recoil";
+import { formoverlay } from "@/Atoms/Atom";
 
 const programs = [
     { name: "Professional Certificate Program in Product Management", referrer: "₹7,000", referee: "₹9,000", category: "Product Management" },
@@ -38,6 +40,7 @@ export default function ReferralBenefits() {
     const [selectedCategory, setSelectedCategory] = useState("All Programs");
     const [isEnrolled, setIsEnrolled] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
+    const setOpen = useSetRecoilState(formoverlay);
     const categoriesRef = useRef<HTMLDivElement | null>(null);
     const tableBodyRef = useRef<HTMLDivElement | null>(null);
       
@@ -267,7 +270,7 @@ export default function ReferralBenefits() {
                     {/* Refer Now Button */}
                 </div>
                 <div className="flex justify-center mt-6">
-                        <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-2 rounded-lg text-lg font-medium">
+                        <Button onClick={()=>setOpen(true)} className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-2 rounded-lg text-lg font-medium">
                             Refer Now
                         </Button>
                     </div>

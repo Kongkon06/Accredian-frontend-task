@@ -6,7 +6,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useState } from "react"
-import { Loader2, Github } from "lucide-react"
+import { Loader2 } from "lucide-react"
 import { Link } from "react-router-dom"
 
 const formSchema = z.object({
@@ -85,11 +85,11 @@ export function SignInForm() {
                 </FormItem>
               )}
             />
-            <Link to="/forgot-password" className="text-sm font-medium text-primary hover:underline">
+            <Link to="/forgot-password" className="text-sm font-medium text-blue-600 hover:underline">
               Forgot password?
             </Link>
           </div>
-          <Button type="submit" className="w-full" disabled={isLoading}>
+          <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-400" disabled={isLoading}>
             {isLoading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -101,19 +101,6 @@ export function SignInForm() {
           </Button>
         </form>
       </Form>
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t" />
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
-        </div>
-      </div>
-      <div className="grid gap-2">
-        <Button variant="outline" type="button">
-          <Github className="mr-2 h-4 w-4" /> Github
-        </Button>
-      </div>
     </div>
   )
 }

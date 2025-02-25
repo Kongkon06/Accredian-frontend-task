@@ -2,12 +2,11 @@ import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import Logo from '@/assets/Link.svg'
 import { Menu, X } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export function Appbar() {
     const [scrolled, setScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  
-    // Add scroll effect
     useEffect(() => {
       const handleScroll = () => {
         setScrolled(window.scrollY > 10);
@@ -47,7 +46,7 @@ export function Appbar() {
                 About Us
               </Button>
               <Button className='bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-xl'>
-                Login
+                <Link to={'/auth'}>Login</Link>
               </Button>
               <Button className='bg-blue-600 hover:bg-blue-700 rounded-xl'>
                 Try for Free

@@ -1,4 +1,3 @@
-import ReferralModal from "@/components/Referral"
 import { SVG } from "@/components/SVG"
 import ReferralBenefits from "@/components/Benefits"
 import { FAQSection } from "@/components/Frequentask"
@@ -17,14 +16,13 @@ export function Home() {
       </div>
       <section className="container mx-auto px-4 pt-20 pb-12 text-center">
         <h1 className="mb-6 text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-          Refer Friends & <span className="text-primary">Earn Rewards</span>
+          Refer Friends & <span className="text-blue-600">Earn Rewards</span>
         </h1>
         <p className="mx-auto mb-8 max-w-2xl text-lg text-muted-foreground sm:text-xl">
           Share the gift of learning with your friends and earn exciting rewards. Get up to $50 in course credits for
           every successful referral.
         </p>
         <Hero/>
-        <ReferralModal />
       </section>
 
       {/* How it Works Section */}
