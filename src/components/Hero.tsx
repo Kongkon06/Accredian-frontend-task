@@ -67,12 +67,12 @@ export default function Hero() {
             </div>
             
             {/* Image Section - responsive adjustments */}
-            <div className="w-full md:w-1/2 md:ml-auto top-4 relative md:static flex justify-center md:justify-end">
+            <div className="w-full h-full md:w-1/2 md:ml-auto  relative md:static flex justify-center md:justify-end">
               <div className="relative md:absolute -z-10 md:right-0 md:top-0 md:bottom-0 md:h-full">
                 <img 
                   src={HeroSvg} 
                   alt="Learn and earn illustration" 
-                  className="object-contain h-64 sm:h-80 md:h-full w-full max-w-sm md:max-w-none md:translate-y-0 mt-4 md:mt-0"
+                  className="object-contain relative top-0 h-64 sm:h-80 md:h-full w-full max-w-sm md:max-w-none md:translate-y-0 mt-4 md:mt-0"
                 />
               </div>
             </div>
