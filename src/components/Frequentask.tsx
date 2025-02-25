@@ -24,7 +24,7 @@ export function FAQSection() {
   const sidebarItems = ["Eligibility", "How To Use?", "Terms & Conditions"];
 
   return (
-    <div className="max-w-6xl mx-auto p-4 md:p-8">
+    <div className="max-w-6xl mb-8 mx-auto p-4 md:p-8">
       <div className="flex flex-col md:flex-row gap-8">
         {/* Mobile Menu Toggle */}
         <div className="md:hidden mb-4">

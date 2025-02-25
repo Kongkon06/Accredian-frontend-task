@@ -265,12 +265,12 @@ export default function ReferralBenefits() {
                     </div>
 
                     {/* Refer Now Button */}
-                    <div className="flex justify-center mt-6">
+                </div>
+                <div className="flex justify-center mt-6">
                         <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-2 rounded-lg text-lg font-medium">
                             Refer Now
                         </Button>
                     </div>
-                </div>
             </div>
         </div>
   );
