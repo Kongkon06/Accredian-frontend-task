@@ -12,21 +12,19 @@ export default function Hero() {
   }, []);
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center px-4 sm:px-6 py-12">
+    <div className="w-full flex items-center justify-center px-4 sm:px-6 py-12">
       <div className={`w-full max-w-6xl transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-        <div className="relative overflow-hidden flex rounded-3xl bg-gradient-to-br from-blue-50 to-indigo-100 shadow-lg">
+        <div className="relative overflow-hidden flex flex-col md:flex-row rounded-3xl bg-gradient-to-br from-blue-50 to-indigo-100 shadow-lg">
           {/* Background pattern */}
           <div className="absolute top-0 left-0 w-full h-full opacity-10">
             <div className="absolute top-0 left-0 w-32 h-32 bg-blue-400 rounded-full -translate-x-16 -translate-y-16"></div>
             <div className="absolute bottom-0 right-0 w-64 h-64 bg-indigo-400 rounded-full translate-x-24 translate-y-24"></div>
           </div>
 
-          <div className="relative z-10 flex flex-col md:flex-row items-center justify-between">
+          <div className="relative z-10 flex flex-col md:flex-row items-center justify-between w-full">
             {/* Content Section */}
-            <div className="w-full  p-6 md:p-12 flex flex-col">
+            <div className="w-full md:w-1/2 p-6 md:p-6 flex flex-col">
               <div className="space-y-6">
-                {/* Badge */}
-                
                 {/* Heading */}
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-gray-900">
                   <span className="block">Let's Learn</span>
@@ -68,13 +66,19 @@ export default function Hero() {
               </div>
             </div>
             
-            {/* Image Section */}
+            {/* Image Section - responsive adjustments */}
+            <div className="w-full md:w-1/2 md:ml-auto top-4 relative md:static flex justify-center md:justify-end">
+              <div className="relative md:absolute -z-10 md:right-0 md:top-0 md:bottom-0 md:h-full">
+                <img 
+                  src={HeroSvg} 
+                  alt="Learn and earn illustration" 
+                  className="object-contain h-64 sm:h-80 md:h-full w-full max-w-sm md:max-w-none md:translate-y-0 mt-4 md:mt-0"
+                />
+              </div>
+            </div>
           </div>
-          <div className='ml-auto relative top-16 z-10 flex-2 justify-center'>
-                    <img src={HeroSvg} className='relative top-4 object-cotain h-full w-full'/>
-                </div>
         </div>
       </div>
     </div>
   );
-}
+}   

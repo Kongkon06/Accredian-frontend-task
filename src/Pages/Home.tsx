@@ -3,12 +3,13 @@ import { SVG } from "@/components/SVG"
 import ReferralBenefits from "@/components/Benefits"
 import { FAQSection } from "@/components/Frequentask"
 import Footer from "@/components/Footer"
+import Hero from "@/components/Hero"
 
 export function Home() {
   return (
     <main className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
       {/* Hero Section */}
-      <section className="container mx-auto px-4 pt-20 pb-32 text-center">
+      <section className="container mx-auto px-4 pt-20 pb-12 text-center">
         <h1 className="mb-6 text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
           Refer Friends & <span className="text-primary">Earn Rewards</span>
         </h1>
@@ -16,6 +17,7 @@ export function Home() {
           Share the gift of learning with your friends and earn exciting rewards. Get up to $50 in course credits for
           every successful referral.
         </p>
+        <Hero/>
         <ReferralModal />
       </section>
 
