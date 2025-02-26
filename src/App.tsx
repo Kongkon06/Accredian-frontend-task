@@ -7,7 +7,6 @@ export default function App() {
   return <RecoilRoot>
   <BrowserRouter>
   <Routes>
-    
     <Route path="/" element={<Home/>}/>
     <Route path="/auth" element={<AuthPage/>}/>
   </Routes>

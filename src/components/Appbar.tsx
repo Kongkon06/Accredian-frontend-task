@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import Logo from '@/assets/Link.svg'
 import { Menu, X } from "lucide-react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export function Appbar() {
     const [scrolled, setScrolled] = useState(false);
+    const navigate =useNavigate();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     useEffect(() => {
       const handleScroll = () => {
@@ -45,8 +46,8 @@ export function Appbar() {
               <Button variant="ghost" className='hover:bg-blue-50 font-medium text-gray-700 hover:text-blue-600'>
                 About Us
               </Button>
-              <Button className='bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-xl'>
-                <Link to={'/auth'}>Login</Link>
+              <Button onClick={()=>navigate('/Auth')} className='bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-xl'>
+               Login
               </Button>
               <Button className='bg-blue-600 hover:bg-blue-700 rounded-xl'>
                 Try for Free
