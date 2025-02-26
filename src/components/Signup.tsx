@@ -9,6 +9,8 @@ import { Loader2 } from "lucide-react"
 import { Progress } from "@/components/ui/progress"
 import axios from "axios"
 import { BACKEND_URL } from "@/config"
+import Cookies from "js-cookie"
+import { useNavigate } from "react-router-dom"
 
 
 const passwordSchema = z
@@ -36,8 +38,8 @@ const formSchema = z
 export function SignUpForm() {
   const [isLoading, setIsLoading] = useState(false)
   const [passwordStrength, setPasswordStrength] = useState(0)
-  const url = BACKEND_URL
-  console.log(url)
+  const url = BACKEND_URL;
+  const navigate = useNavigate();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -70,6 +72,11 @@ export function SignUpForm() {
         password:values.confirmPassword,
         ph_no:values.phone
       })
+      if (res.data.token) {
+        // Set token in cookie (expires in 7 days)
+        Cookies.set("authToken", res.data.token, { expires: 7, secure: true, sameSite: "Strict" });
+        navigate('/')
+      }
       console.log(res);
     } catch (error) {
       console.error(error)
