@@ -46,7 +46,7 @@ export function Appbar() {
               <Button variant="ghost" className='hover:bg-blue-50 font-medium text-gray-700 hover:text-blue-600'>
                 About Us
               </Button>
-              <Button onClick={()=>navigate('/Auth')} className='bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-xl'>
+              <Button onClick={()=>navigate('/account/auth')} className='bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-xl'>
                Login
               </Button>
               <Button className='bg-blue-600 hover:bg-blue-700 rounded-xl'>

@@ -7,6 +7,8 @@ import { Input } from "@/components/ui/input"
 import { useState } from "react"
 import { Loader2 } from "lucide-react"
 import { Progress } from "@/components/ui/progress"
+import axios from "axios"
+import { BACKEND_URL } from "@/config"
 
 
 const passwordSchema = z
@@ -34,7 +36,8 @@ const formSchema = z
 export function SignUpForm() {
   const [isLoading, setIsLoading] = useState(false)
   const [passwordStrength, setPasswordStrength] = useState(0)
-
+  const url = BACKEND_URL
+  console.log(url)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -61,11 +64,14 @@ export function SignUpForm() {
     setIsLoading(true)
     try {
       // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000))
-      console.log(values)
-      // Handle successful sign up
+      const res = await axios.post(`${url}/signup`,{
+        name : values.firstName + " " + values.lastName,
+        email: values.email,
+        password:values.confirmPassword,
+        ph_no:values.phone
+      })
+      console.log(res);
     } catch (error) {
-      // Handle error
       console.error(error)
     } finally {
       setIsLoading(false)

@@ -91,16 +91,6 @@ export default function Hero() {
                                             </DialogHeader>
                                             <form onSubmit={handleSubmit} className="space-y-4">
                                                 <div className="space-y-2">
-                                                    <Label htmlFor="referrerName">Your Name</Label>
-                                                    <Input id="referrerName" placeholder="Enter your name" required />
-                                                </div>
-
-                                                <div className="space-y-2">
-                                                    <Label htmlFor="referrerEmail">Your Email</Label>
-                                                    <Input id="referrerEmail" type="email" placeholder="Enter your email" required />
-                                                </div>
-
-                                                <div className="space-y-2">
                                                     <Label htmlFor="friendName">Friend's Name</Label>
                                                     <Input id="friendName" placeholder="Enter friend's name" required />
                                                 </div>

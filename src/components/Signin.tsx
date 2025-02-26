@@ -8,6 +8,8 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { useState } from "react"
 import { Loader2 } from "lucide-react"
 import { Link } from "react-router-dom"
+import axios from "axios"
+import { BACKEND_URL } from "@/config"
 
 const formSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -17,7 +19,7 @@ const formSchema = z.object({
 
 export function SignInForm() {
   const [isLoading, setIsLoading] = useState(false)
-
+  const url = BACKEND_URL
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -31,8 +33,8 @@ export function SignInForm() {
     setIsLoading(true)
     try {
       // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000))
-      console.log(values)
+      const res=await axios.post(`${url}/signin`,values)
+      console.log(res)
       // Handle successful sign in
     } catch (error) {
       // Handle error
