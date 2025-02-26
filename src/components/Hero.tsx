@@ -21,6 +21,8 @@ import { BACKEND_URL } from "@/config";
 import { z } from 'zod';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 
 const formSchema = z.object({
     name: z.string().min(1, "Friend's name is required"),
@@ -35,7 +37,8 @@ type FormData = z.infer<typeof formSchema>;
 
 export default function Hero() {
     const [isVisible, setIsVisible] = useState(false);
-    const [open, setOpen] = useRecoilState(formoverlay)
+    const [open, setOpen] = useRecoilState(formoverlay);
+    const navigate = useNavigate();
     const { register, handleSubmit, setValue, formState: { errors } } = useForm<FormData>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -45,12 +48,25 @@ export default function Hero() {
             terms: false,
         },
     });
-    const onSubmit = async(data: FormData) => {
-        const res = await axios.post(`${BACKEND_URL}/refer`,data);
+    const onSubmit = async (data: FormData) => {
+        const token = Cookies.get("authToken"); // Get the token from cookies
+        const requestData = {
+            ...data, // Spread the form data
+            token: token, // Add the token inside the body
+        };
+        const res = await axios.post(`${BACKEND_URL}/refferal`, requestData);
         console.log(res.data);
-      };
+    };
+    const handleReferClick = () => {
+        const token = Cookies.get("authToken");
+        if (!token) {
+            navigate("/account/auth"); // Redirect to sign-in page if no token
+        } else {
+            setOpen(true); // Open the dialog if token is present
+        }
+    };
     useEffect(() => {
-        
+
         setIsVisible(true);
     }, []);
 
@@ -100,59 +116,69 @@ export default function Hero() {
 
                                 {/* CTA */}
                                 <div className="pt-6">
-                                    <Dialog open={open} onOpenChange={setOpen}>
+                                    <Dialog open={open} onOpenChange={(isOpen) => {
+                                        if (Cookies.get("authToken")) {
+                                            setOpen(isOpen); // Only allow open change if the token exists
+                                        }
+                                    }}>
                                         <DialogTrigger asChild>
-                                            <Button size="lg" className="text-lg bg-blue-600 hover:bg-blue-600">
+                                            <Button
+                                                size="lg"
+                                                className="text-lg bg-blue-600 hover:bg-blue-600"
+                                                onClick={handleReferClick} // Ensure logic runs on click
+                                            >
                                                 Refer Now
                                             </Button>
                                         </DialogTrigger>
-                                        <DialogContent className="sm:max-w-[425px]">
-                                            <DialogHeader>
-                                                <DialogTitle>Refer a Friend</DialogTitle>
-                                                <DialogDescription>Fill in the details below to refer your friend and earn rewards.</DialogDescription>
-                                            </DialogHeader>
-                                            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                                                <div className="space-y-2">
-                                                    <Label htmlFor="friendName">Friend's Name</Label>
-                                                    <Input {...register("name")} id="friendName" placeholder="Enter friend's name" required />
-                                                    {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
-                                                </div>
+                                        {open && (
+                                            <DialogContent className="sm:max-w-[425px]">
+                                                <DialogHeader>
+                                                    <DialogTitle>Refer a Friend</DialogTitle>
+                                                    <DialogDescription>Fill in the details below to refer your friend and earn rewards.</DialogDescription>
+                                                </DialogHeader>
+                                                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                                                    <div className="space-y-2">
+                                                        <Label htmlFor="friendName">Friend's Name</Label>
+                                                        <Input {...register("name")} id="friendName" placeholder="Enter friend's name" required />
+                                                        {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
+                                                    </div>
 
-                                                <div className="space-y-2">
-                                                    <Label htmlFor="friendEmail">Friend's Email</Label>
-                                                    <Input {...register("email")} id="friendEmail" type="email" placeholder="Enter friend's email" required />
-                                                    {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
-                                                </div>
+                                                    <div className="space-y-2">
+                                                        <Label htmlFor="friendEmail">Friend's Email</Label>
+                                                        <Input {...register("email")} id="friendEmail" type="email" placeholder="Enter friend's email" required />
+                                                        {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
+                                                    </div>
 
-                                                <div className="space-y-2">
-                                                    <Label htmlFor="course">Select Course</Label>
-                                                    <Select onValueChange={(value) => setValue("course", value)} required>
-                                                        <SelectTrigger>
-                                                            <SelectValue placeholder="Select a course" />
-                                                        </SelectTrigger>
-                                                        <SelectContent>
-                                                            <SelectItem value="web-development">Web Development</SelectItem>
-                                                            <SelectItem value="data-science">Data Science</SelectItem>
-                                                            <SelectItem value="mobile-dev">Mobile Development</SelectItem>
-                                                            <SelectItem value="ai-ml">AI & Machine Learning</SelectItem>
-                                                        </SelectContent>
-                                                    </Select>
-                                                    {errors.course && <p className="text-red-500 text-sm">{errors.course.message}</p>}
-                                                </div>
+                                                    <div className="space-y-2">
+                                                        <Label htmlFor="course">Select Course</Label>
+                                                        <Select onValueChange={(value) => setValue("course", value)} required>
+                                                            <SelectTrigger>
+                                                                <SelectValue placeholder="Select a course" />
+                                                            </SelectTrigger>
+                                                            <SelectContent>
+                                                                <SelectItem value="web-development">Web Development</SelectItem>
+                                                                <SelectItem value="data-science">Data Science</SelectItem>
+                                                                <SelectItem value="mobile-dev">Mobile Development</SelectItem>
+                                                                <SelectItem value="ai-ml">AI & Machine Learning</SelectItem>
+                                                            </SelectContent>
+                                                        </Select>
+                                                        {errors.course && <p className="text-red-500 text-sm">{errors.course.message}</p>}
+                                                    </div>
 
-                                                <div className="flex items-center space-x-2">
-                                                    <Checkbox id="terms" onCheckedChange={(checked:boolean) => setValue("terms", checked)} />
-                                                    <Label htmlFor="terms" className="text-sm">
-                                                        I agree to the terms and conditions
-                                                    </Label>
-                                                </div>
-                                                {errors.terms && <p className="text-red-500 text-sm">{errors.terms.message}</p>}
+                                                    <div className="flex items-center space-x-2">
+                                                        <Checkbox id="terms" onCheckedChange={(checked: boolean) => setValue("terms", checked)} />
+                                                        <Label htmlFor="terms" className="text-sm">
+                                                            I agree to the terms and conditions
+                                                        </Label>
+                                                    </div>
+                                                    {errors.terms && <p className="text-red-500 text-sm">{errors.terms.message}</p>}
 
-                                                <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-400">
-                                                    Submit Referral
-                                                </Button>
-                                            </form>
-                                        </DialogContent>
+                                                    <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-400">
+                                                        Submit Referral
+                                                    </Button>
+                                                </form>
+                                            </DialogContent>
+                                        )}
                                     </Dialog>
                                     <p className="mt-3 text-xs text-gray-500">*Terms and conditions apply</p>
                                 </div>

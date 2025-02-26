@@ -13,6 +13,8 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { useSetRecoilState } from "recoil";
 import { formoverlay } from "@/Atoms/Atom";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 
 const programs = [
     { name: "Professional Certificate Program in Product Management", referrer: "₹7,000", referee: "₹9,000", category: "Product Management" },
@@ -43,6 +45,15 @@ export default function ReferralBenefits() {
     const setOpen = useSetRecoilState(formoverlay);
     const categoriesRef = useRef<HTMLDivElement | null>(null);
     const tableBodyRef = useRef<HTMLDivElement | null>(null);
+    const navigate = useNavigate();
+    const handleClick = () => {
+        const token = Cookies.get("authToken");
+        if (!token) {
+            navigate("/account/auth"); // Redirect to sign-in page if no token
+        } else {
+            setOpen(true); // Open the dialog if token is present
+        }
+    };
       
 
     // Filter programs based on selected category and search term
@@ -270,7 +281,7 @@ export default function ReferralBenefits() {
                     {/* Refer Now Button */}
                 </div>
                 <div className="flex justify-center mt-6">
-                        <Button onClick={()=>setOpen(true)} className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-2 rounded-lg text-lg font-medium">
+                        <Button onClick={handleClick} className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-2 rounded-lg text-lg font-medium">
                             Refer Now
                         </Button>
                     </div>

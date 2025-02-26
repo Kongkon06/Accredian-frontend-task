@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useState } from "react"
 import { Loader2 } from "lucide-react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import axios from "axios"
 import { BACKEND_URL } from "@/config"
 import Cookies from "js-cookie";
@@ -20,7 +20,8 @@ const formSchema = z.object({
 
 export function SignInForm() {
   const [isLoading, setIsLoading] = useState(false)
-  const url = BACKEND_URL
+  const url = BACKEND_URL;
+  const navigte = useNavigate();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -34,13 +35,12 @@ export function SignInForm() {
     setIsLoading(true);
     try {
       // API call
-      const res = await axios.post(`${url}/signin`, values);
+      const res = await axios.post(`${url}/signin`, values,{withCredentials: true});
       
       if (res.data.token) {
         // Set token in cookie (expires in 7 days)
         Cookies.set("authToken", res.data.token, { expires: 7, secure: true, sameSite: "Strict" });
-        
-        console.log("Token saved in cookies:", res.data.token);
+        navigte('/')
       }
   
       // Handle successful sign-in (e.g., redirect user)

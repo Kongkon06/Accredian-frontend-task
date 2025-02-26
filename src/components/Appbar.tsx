@@ -2,12 +2,24 @@ import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import Logo from '@/assets/Link.svg'
 import { Menu, X } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
+import { useSetRecoilState } from "recoil";
+import { formoverlay } from "@/Atoms/Atom";
 
 export function Appbar() {
     const [scrolled, setScrolled] = useState(false);
     const navigate =useNavigate();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const setOpen = useSetRecoilState(formoverlay);
+    const handleClick = () => {
+      const token = Cookies.get("authToken");
+      if (!token) {
+          navigate("/account/auth"); // Redirect to sign-in page if no token
+      } else {
+          setOpen(true); // Open the dialog if token is present
+      }
+  };
     useEffect(() => {
       const handleScroll = () => {
         setScrolled(window.scrollY > 10);
@@ -37,7 +49,7 @@ export function Appbar() {
   
             {/* Desktop Navigation */}
             <div className='hidden md:flex items-center gap-2 lg:gap-4'>
-              <Button variant="ghost" className='hover:bg-blue-50 font-medium text-gray-700 hover:text-blue-600'>
+              <Button onClick={handleClick} variant="ghost" className='hover:bg-blue-50 font-medium text-gray-700 hover:text-blue-600'>
                 Refer & Earn
               </Button>
               <Button variant="ghost" className='hover:bg-blue-50 font-medium text-gray-700 hover:text-blue-600'>
@@ -49,9 +61,11 @@ export function Appbar() {
               <Button onClick={()=>navigate('/account/auth')} className='bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-xl'>
                Login
               </Button>
+              <Link to={'/account/auth'}>
               <Button className='bg-blue-600 hover:bg-blue-700 rounded-xl'>
                 Try for Free
               </Button>
+              </Link>
             </div>
   
             {/* Mobile Menu Button */}
