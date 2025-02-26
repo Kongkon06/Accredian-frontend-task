@@ -3,12 +3,12 @@ import HeroSvg from '@/assets/Hero.svg';
 import { Gift, Users } from "lucide-react";
 import { Button } from "@/components/ui/button"
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -16,19 +16,41 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "./ui/checkbox";
 import { useRecoilState } from "recoil";
 import { formoverlay } from "@/Atoms/Atom";
+import axios from "axios";
+import { BACKEND_URL } from "@/config";
+import { z } from 'zod';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+
+const formSchema = z.object({
+    name: z.string().min(1, "Friend's name is required"),
+    email: z.string().email("Invalid email address"),
+    course: z.string().min(1, "Course selection is required"),
+    terms: z.boolean().refine(val => val === true, {
+        message: "You must agree to the terms and conditions",
+    }),
+});
+
+type FormData = z.infer<typeof formSchema>;
 
 export default function Hero() {
     const [isVisible, setIsVisible] = useState(false);
     const [open, setOpen] = useRecoilState(formoverlay)
-    
-      const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault()
-        // Handle form submission
-        setOpen(false)
-      }
-    
+    const { register, handleSubmit, setValue, formState: { errors } } = useForm<FormData>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            name: "",
+            email: "",
+            course: "",
+            terms: false,
+        },
+    });
+    const onSubmit = async(data: FormData) => {
+        const res = await axios.post(`${BACKEND_URL}/refer`,data);
+        console.log(res.data);
+      };
     useEffect(() => {
-        // Animation on component mount
+        
         setIsVisible(true);
     }, []);
 
@@ -89,20 +111,22 @@ export default function Hero() {
                                                 <DialogTitle>Refer a Friend</DialogTitle>
                                                 <DialogDescription>Fill in the details below to refer your friend and earn rewards.</DialogDescription>
                                             </DialogHeader>
-                                            <form onSubmit={handleSubmit} className="space-y-4">
+                                            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                                                 <div className="space-y-2">
                                                     <Label htmlFor="friendName">Friend's Name</Label>
-                                                    <Input id="friendName" placeholder="Enter friend's name" required />
+                                                    <Input {...register("name")} id="friendName" placeholder="Enter friend's name" required />
+                                                    {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
                                                 </div>
 
                                                 <div className="space-y-2">
                                                     <Label htmlFor="friendEmail">Friend's Email</Label>
-                                                    <Input id="friendEmail" type="email" placeholder="Enter friend's email" required />
+                                                    <Input {...register("email")} id="friendEmail" type="email" placeholder="Enter friend's email" required />
+                                                    {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
                                                 </div>
 
                                                 <div className="space-y-2">
                                                     <Label htmlFor="course">Select Course</Label>
-                                                    <Select required>
+                                                    <Select onValueChange={(value) => setValue("course", value)} required>
                                                         <SelectTrigger>
                                                             <SelectValue placeholder="Select a course" />
                                                         </SelectTrigger>
@@ -113,14 +137,16 @@ export default function Hero() {
                                                             <SelectItem value="ai-ml">AI & Machine Learning</SelectItem>
                                                         </SelectContent>
                                                     </Select>
+                                                    {errors.course && <p className="text-red-500 text-sm">{errors.course.message}</p>}
                                                 </div>
 
                                                 <div className="flex items-center space-x-2">
-                                                    <Checkbox id="terms" required />
+                                                    <Checkbox id="terms" onCheckedChange={(checked:boolean) => setValue("terms", checked)} />
                                                     <Label htmlFor="terms" className="text-sm">
                                                         I agree to the terms and conditions
                                                     </Label>
                                                 </div>
+                                                {errors.terms && <p className="text-red-500 text-sm">{errors.terms.message}</p>}
 
                                                 <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-400">
                                                     Submit Referral

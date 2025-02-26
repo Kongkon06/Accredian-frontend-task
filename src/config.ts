@@ -1,1 +1,1 @@
-export const BACKEND_URL="http://localhost:3000/api/Refer&Earn"
+export const BACKEND_URL="https://accredian-backend-task-nfn9.onrender.com/api/Refer&Earn"

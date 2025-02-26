@@ -10,6 +10,7 @@ import { Loader2 } from "lucide-react"
 import { Link } from "react-router-dom"
 import axios from "axios"
 import { BACKEND_URL } from "@/config"
+import Cookies from "js-cookie";
 
 const formSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -30,17 +31,23 @@ export function SignInForm() {
   })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      // Simulate API call
-      const res=await axios.post(`${url}/signin`,values)
-      console.log(res)
-      // Handle successful sign in
+      // API call
+      const res = await axios.post(`${url}/signin`, values);
+      
+      if (res.data.token) {
+        // Set token in cookie (expires in 7 days)
+        Cookies.set("authToken", res.data.token, { expires: 7, secure: true, sameSite: "Strict" });
+        
+        console.log("Token saved in cookies:", res.data.token);
+      }
+  
+      // Handle successful sign-in (e.g., redirect user)
     } catch (error) {
-      // Handle error
-      console.error(error)
+      console.error("Sign-in error:", error);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
